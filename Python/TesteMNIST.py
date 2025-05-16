@@ -1,3 +1,5 @@
+# Arquivo de teste que baixa o banco de dados MNIST salva nas variáveis e separa as imagens de treino e teste
+
 from sklearn.datasets import fetch_openml   # Para conseguir baixar o banco
 from sklearn.model_selection import train_test_split    # Para separar automaticamente o q é teste e o q é treino
 

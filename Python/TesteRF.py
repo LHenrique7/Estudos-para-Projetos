@@ -1,8 +1,10 @@
-# mesma coisa do teste MNIST, porém aplicando PCA
+# Seguindo os testes, agora após o PCA treino, teste e avaliação do modelo
 
 from sklearn.datasets import fetch_openml   # Para conseguir baixar o banco
 from sklearn.model_selection import train_test_split    # Para separar automaticamente o q é teste e o q é treino
 from sklearn.decomposition import PCA   # Para diminuir o array das imagens (784x1)
+from sklearn.ensemble import RandomForestClassifier # Importando o modelo do random forest
+from sklearn.metrics import accuracy_score, classification_report   # Importando as métricas para ver se o modelo deu bom
 
 # Baixando o banco
 mnist = fetch_openml('mnist_784', version=1)
@@ -26,8 +28,24 @@ X_train, x_test, Y_train, y_test = train_test_split(
 # random_state serve para que sempre que o codigo rodar tenha a mesma separação entre as imagens (util para ver se os resultados melhoraram)
 # stratify serve para separar as imagens de uma maneira proporcional, ter varios numeros no teste
 
-#printing the shapes of the vectors 
-print('X_train: ' + str(X_train .shape))
+# Mostra quantas imagens ficaram nas variaveis X e também o tamanho do array
+print('X_train: ' + str(X_train.shape))
 print('Y_train: ' + str(Y_train.shape))
 print('X_test:  '  + str(x_test.shape))
 print('Y_test:  '  + str(y_test.shape))
+
+modeloRF = RandomForestClassifier(
+    n_estimators=100,         # Numero de árvores de decisão
+    random_state=1,           # Mesma coisa da separação das imagens só que para manter as arvores iguais
+    n_jobs=-1                 # Usa todos os núcleos disponíveis para acelerar o treino
+)
+
+# Treinando modelo
+modeloRF.fit(X_train, Y_train)
+
+# Testando o modelo
+resultado = modeloRF.predict(x_test)
+
+# Avaliação
+print("Acurácia:", accuracy_score(y_test, resultado))
+print(classification_report(y_test, resultado))
