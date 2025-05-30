@@ -4,7 +4,8 @@ from sklearn.datasets import fetch_openml   # Para conseguir baixar o banco
 from sklearn.model_selection import train_test_split    # Para separar automaticamente o q é teste e o q é treino
 from sklearn.decomposition import PCA   # Para diminuir o array das imagens (784x1)
 from sklearn.ensemble import RandomForestClassifier # Importando o modelo do random forest
-from sklearn.metrics import accuracy_score, classification_report   # Importando as métricas para ver se o modelo deu bom
+from sklearn.metrics import accuracy_score, confusion_matrix, ConfusionMatrixDisplay   # Importando as métricas para ver se o modelo deu bom
+import matplotlib.pyplot as plt
 
 # Baixando o banco
 mnist = fetch_openml('mnist_784', version=1)
@@ -46,6 +47,10 @@ modeloRF.fit(X_train, Y_train)
 # Testando o modelo
 resultado = modeloRF.predict(x_test)
 
-# Avaliação
+# Avaliação e matriz de Confusão
 print("Acurácia:", accuracy_score(y_test, resultado))
-print(classification_report(y_test, resultado))
+cm = confusion_matrix(y_test, resultado)
+disp = ConfusionMatrixDisplay(confusion_matrix=cm)
+disp.plot(cmap=plt.cm.Blues)
+plt.title("Matriz de Confusão - Modelo Random Forest")
+plt.show()
